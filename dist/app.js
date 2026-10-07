@@ -1,7 +1,7 @@
 
 /* ===== CONFIGURE AQUI ===== */
-const CHECKOUT_URL = ""; // Teste B: todos os botões permanecem dentro da página, sem checkout.
-const PRECO = "39,90";        // preço do kit
+const CHECKOUT_URL = "https://pay.wiapy.com/mXwAt-yOyxfN"; // Checkout aprovado para o kit completo.
+const PRECO = "27,90";        // preço do kit
 const PRECO_DE = "";          // preço anterior REAL, ex: "47,00". Vazio = não mostra "de/por"
 const OFERTA_ATE = "";        // data final REAL da promoção, ex: "2026-10-31". Vazio = faixa do topo sem data
 const CNPJ = "";              // CNPJ ou nome do responsável, para o rodapé
@@ -98,10 +98,60 @@ marquee(document.getElementById("pages-track"), "pm-in");
 ["section.final","#garantia"].forEach(sel => { const el = document.querySelector(sel); if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   el.classList.add("arm"); aoVer(el, () => el.classList.add("go")); });
 
-/* Teste B sem checkout: os botões exibem a oferta nesta página. */
-document.querySelectorAll(".js-checkout").forEach(b => b.classList.add("js-go"));
+/* Compra direta: preservar parâmetros de campanha e os adicionados pela UTMify. */
+const campaignParams = new URLSearchParams(location.search);
+document.querySelectorAll(".js-checkout").forEach(link => {
+  const destination = new URL(link.getAttribute("href") || CHECKOUT_URL);
+  for (const name of ["utm_source","utm_campaign","utm_medium","utm_content","utm_term","src","sck","fbclid","gclid"]) {
+    const value = campaignParams.get(name);
+    if (value && !destination.searchParams.has(name)) destination.searchParams.set(name,value);
+  }
+  link.href = destination.href;
+});
+/* Os demais botões levam ao card de preço dentro da página. */
 document.querySelectorAll(".js-go").forEach(a => { a.addEventListener("click", e => { e.preventDefault();
   const t = document.querySelector(".price-card") || document.getElementById("oferta");
   const go = () => { const r = t.getBoundingClientRect(); const y = window.scrollY + r.top - Math.max(16, (window.innerHeight - r.height) / 2); window.scrollTo({top: Math.max(0, y), behavior: "smooth"}); };
   go(); setTimeout(() => { const r = t.getBoundingClientRect(); if (Math.abs(r.top - Math.max(16, (window.innerHeight - r.height) / 2)) > 8) go(); }, 900);
   t.classList.remove("flash"); void t.offsetWidth; t.classList.add("flash"); }); });
+
+// A trusted public feed of confirmed payments is required. No demo sales.
+const purchaseToast=document.getElementById('purchase-toast');
+const purchaseMessage=document.getElementById('purchase-message');
+const seenPurchases=new Set();
+try{JSON.parse(sessionStorage.getItem('mesa-natal-confirmed-purchases')||'[]').forEach(id=>seenPurchases.add(id));}catch{}
+let toastTimer,feedBusy=false,lastPurchaseShown=0;
+const hidePurchase=()=>{purchaseToast.hidden=true;clearTimeout(toastTimer);};
+document.getElementById('purchase-dismiss').addEventListener('click',hidePurchase);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)hidePurchase();});
+function recentConfirmedPurchase(record){
+  if(!record||typeof record!=='object'||record.status!=='paid'||record.audience!=='women')return false;
+  if(typeof record.id!=='string'||record.id.length>100||!record.id||seenPurchases.has(record.id))return false;
+  if(typeof record.firstName!=='string'||!/^\p{L}[\p{L}'’-]{1,29}$/u.test(record.firstName))return false;
+  if(record.lastInitial!=null&&(typeof record.lastInitial!=='string'||!/^\p{L}$/u.test(record.lastInitial)))return false;
+  const age=Date.now()-Date.parse(record.paidAt);
+  return Number.isFinite(age)&&age>=0&&age<=10*60*1000;
+}
+async function pollPurchases(){
+  const endpoint=purchaseToast.dataset.feed;
+  if(!endpoint||document.hidden||document.querySelector('dialog[open]')||feedBusy||Date.now()-lastPurchaseShown<30000)return;
+  let url;try{url=new URL(endpoint,location.href);}catch{return;}
+  if(url.protocol!=='https:')return;
+  feedBusy=true;
+  try{
+    const response=await fetch(url,{cache:'no-store',credentials:'omit',signal:AbortSignal.timeout(8000)});
+    if(!response.ok)return;
+    const records=await response.json();
+    if(!Array.isArray(records)||document.hidden||document.querySelector('dialog[open]'))return;
+    const record=records.filter(recentConfirmedPurchase).sort((a,b)=>Date.parse(b.paidAt)-Date.parse(a.paidAt))[0];
+    if(!record)return;
+    const name=record.firstName+(record.lastInitial?' '+record.lastInitial.toUpperCase()+'.':'');
+    const nameLabel=document.createElement('strong');nameLabel.textContent=name;
+    purchaseMessage.replaceChildren(nameLabel,document.createTextNode(' acabou de garantir os +100 moldes de Natal.'));
+    seenPurchases.add(record.id);lastPurchaseShown=Date.now();
+    try{sessionStorage.setItem('mesa-natal-confirmed-purchases',JSON.stringify([...seenPurchases].slice(-100)));}catch{}
+    purchaseToast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(hidePurchase,8000);
+  }catch{/* A failed feed never blocks the page or creates a purchase notice. */}
+  finally{feedBusy=false;}
+}
+if(purchaseToast.dataset.feed){pollPurchases();setInterval(pollPurchases,30000);}

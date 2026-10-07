@@ -2,7 +2,7 @@
   "name": "mesa-posta-natal-teste-b",
   "version": "1.0.0",
   "private": true,
-  "description": "Página natalina de teste B independente, sem checkout",
+  "description": "Página natalina de teste B independente com checkout próprio",
   "scripts": {
     "check": "node scripts/check.mjs",
     "build": "npm run check",

